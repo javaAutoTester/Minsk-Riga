@@ -1,13 +1,12 @@
 package by.htp.belavia.pages;
 
 import java.util.Calendar;
-import java.util.List;
 import java.util.Locale;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-public class HomePage extends AbstractPage {
+public class HomePageReturnQuery extends AbstractPage {
 
 	private static final String HOME_PAGE_URL = "https://en.belavia.by/";
 
@@ -18,18 +17,13 @@ public class HomePage extends AbstractPage {
 	private static final By TO_FIRST_DROPDOWN_ELEMENT = By.xpath("/html/body/ul[2]/li[1]");
 
 	private static final By CALENDAR = By.xpath("/html/body/div[4]/div[1]/div/div/div[2]/div/div");
-	private static final By DEPARTURE_DATE_PICKER = By
-			.xpath("/html/body/div[4]/div[1]/div/div/div[2]/form/div[2]/div[2]/div[1]/div/a/i");
 
 	private static final By CALENDAR_NEXT_LINK = By
 			.xpath("/html/body/div[4]/div[1]/div/div/div[2]/div/div/div[2]/div/a/i");
 
-	private static final By WAY_PICKER_RADIO_BUTTON_LIST = By
-			.xpath("/html/body/div[4]/div[1]/div/div/div[2]/form/div[2]/div[1]/div/label");
-
 	private static final By REQUEST_FORM = By.xpath("/html/body/div[4]/div[1]/div/div/div[2]/form");
 
-	public HomePage(WebDriver driver) {
+	public HomePageReturnQuery(WebDriver driver) {
 		super(driver);
 	}
 
@@ -74,28 +68,37 @@ public class HomePage extends AbstractPage {
 
 	}
 
-	public void pickOneWayTrip() {
-		List<WebElement> radioButtoList = driver.findElements(WAY_PICKER_RADIO_BUTTON_LIST);
-		radioButtoList.get(0).click();
-	}
+	public void pickDate(Calendar dep_date, Calendar ret_date) {
+		System.out.println("Departure date: " + dep_date.getTime());
+		String dep_month = dep_date.getDisplayName(2, 2, new Locale("English", "US"));
+		int dep_year = dep_date.get(1);
+		int dep_month_number = dep_date.get(2);
+		int dep_day = dep_date.get(5);
 
-	public void pickDate(Calendar date) {
-		System.out.println("Departure date: " + date.getTime());
-		String month = date.getDisplayName(2, 2, new Locale("English", "US"));
-		int year = date.get(1);
-		int month_number = date.get(2);
-		int day = date.get(5);
-		WebElement datePicker = driver.findElement(DEPARTURE_DATE_PICKER);
-		datePicker.click();
+		System.out.println("Return date: " + ret_date.getTime());
+		String ret_month = ret_date.getDisplayName(2, 2, new Locale("English", "US"));
+		int ret_year = ret_date.get(1);
+		int ret_month_number = ret_date.get(2);
+		int ret_day = ret_date.get(5);
+
 		WebElement calendar = driver.findElement(CALENDAR);
 
-		while (!calendar.getText().contains(month + " " + year)) {
+		while (!calendar.getText().contains(dep_month + " " + dep_year)) {
 			driver.findElement(CALENDAR_NEXT_LINK).click();
 		}
-		String dataXpath = "/html/body/div[4]/div[1]/div/div/div[2]/div/div/div/table/tbody/tr/td[@data-month='"
-				+ month_number + "']/a[contains(text(),'" + day + "')]";
-		WebElement data = driver.findElement(By.xpath(dataXpath));
-		data.click();
+		String dataXpathDep = "/html/body/div[4]/div[1]/div/div/div[2]/div/div/div/table/tbody/tr/td[@data-month='"
+				+ dep_month_number + "']/a[contains(text(),'" + dep_day + "')]";
+		WebElement dataDep = driver.findElement(By.xpath(dataXpathDep));
+		dataDep.click();
+
+		while (!calendar.getText().contains(ret_month + " " + ret_year)) {
+			driver.findElement(CALENDAR_NEXT_LINK).click();
+		}
+		String dataXpathRet = "/html/body/div[4]/div[1]/div/div/div[2]/div/div/div/table/tbody/tr/td[@data-month='"
+				+ ret_month_number + "']/a[contains(text(),'" + ret_day + "')]";
+		WebElement dataRet = driver.findElement(By.xpath(dataXpathRet));
+		dataRet.click();
+
 	}
 
 	public void submitRequestForm() {

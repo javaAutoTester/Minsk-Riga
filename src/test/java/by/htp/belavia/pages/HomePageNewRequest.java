@@ -37,11 +37,9 @@ public class HomePageNewRequest extends AbstractPage {
 		WebElement calendar = driver.findElement(CALENDAR);
 
 		while (!calendar.getText().contains(month + " " + year)) {
-			// System.out.println("I'M GOING TO CLICK");
 			driver.findElement(CALENDAR_NEXT_LINK).click();
 		}
 
-		// System.out.println("HERE IS THE DATE");
 		String dataXpath = "/html/body/div[4]/div/div/div/div/div/table/tbody/tr/td[@data-month='" + month_number
 				+ "']/a[contains(text(),'" + day + "')]";
 		WebElement data = driver.findElement(By.xpath(dataXpath));
@@ -50,9 +48,7 @@ public class HomePageNewRequest extends AbstractPage {
 
 	public void submitRequestForm() {
 		driver.findElement(REQUEST_FORM).submit();
-		while (driver.findElements(CAPTCHA).size() > 0) {
-			AbstractPage.captchaHandler();
-		}
+		captchaHandler();
 	}
 
 }

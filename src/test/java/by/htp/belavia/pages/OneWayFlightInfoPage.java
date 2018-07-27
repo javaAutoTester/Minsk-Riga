@@ -76,9 +76,7 @@ public class OneWayFlightInfoPage extends AbstractPage {
 		WebElement backButton = driver.findElement(BACK_BUTTON);
 		backButton.click();
 
-		while (driver.findElements(CAPTCHA).size() > 0) {
-			AbstractPage.captchaHandler();
-		}
+		captchaHandler();
 
 	}
 
