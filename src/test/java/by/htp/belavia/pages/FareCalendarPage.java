@@ -33,10 +33,11 @@ public class FareCalendarPage extends AbstractPage {
 			String[] dep = dep_ret[0].split("-");
 			String[] ret = dep_ret[1].split("-");
 			returnFlight.setDep_date(
-					new GregorianCalendar(new Integer(dep[0]), new Integer(dep[1]) - 1, new Integer(dep[2])));
+					new GregorianCalendar(new Integer("20" + dep[0]), new Integer(dep[1]) - 1, new Integer(dep[2])));
 			returnFlight.setRet_date(
-					new GregorianCalendar(new Integer(ret[0]), new Integer(ret[1]) - 1, new Integer(ret[2])));
+					new GregorianCalendar(new Integer("20" + ret[0]), new Integer(ret[1]) - 1, new Integer(ret[2])));
 			String stringPrice = (ticketsAvaliablePrice.get(i).getText().trim().split(" "))[0];
+			stringPrice = stringPrice.replaceAll(",", "");
 			Double price = new Double(stringPrice);
 			returnFlight.setPrice(price);
 			listOFreturnFlights.add(returnFlight);

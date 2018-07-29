@@ -69,13 +69,13 @@ public class HomePageReturnQuery extends AbstractPage {
 	}
 
 	public void pickDate(Calendar dep_date, Calendar ret_date) {
-		System.out.println("Departure date: " + dep_date.getTime());
+		// System.out.println("Departure date: " + dep_date.getTime());
 		String dep_month = dep_date.getDisplayName(2, 2, new Locale("English", "US"));
 		int dep_year = dep_date.get(1);
 		int dep_month_number = dep_date.get(2);
 		int dep_day = dep_date.get(5);
 
-		System.out.println("Return date: " + ret_date.getTime());
+		// System.out.println("Return date: " + ret_date.getTime());
 		String ret_month = ret_date.getDisplayName(2, 2, new Locale("English", "US"));
 		int ret_year = ret_date.get(1);
 		int ret_month_number = ret_date.get(2);
@@ -103,7 +103,6 @@ public class HomePageReturnQuery extends AbstractPage {
 
 	public void submitRequestForm() {
 		driver.findElement(REQUEST_FORM).submit();
-		captchaHandler();
 	}
 
 }

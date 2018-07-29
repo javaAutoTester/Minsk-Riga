@@ -19,6 +19,7 @@ public class BaseTest {
 
 	@AfterTest
 	public void stopDriver() {
+		System.out.println("DRIVER QUITTING...");
 		driver.quit();
 		driver = null;
 	}

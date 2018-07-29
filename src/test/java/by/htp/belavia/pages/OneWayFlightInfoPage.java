@@ -41,7 +41,7 @@ public class OneWayFlightInfoPage extends AbstractPage {
 		int departureMinits = new Integer(hoursMinits[1]);
 		departure.add(Calendar.HOUR, departureHours);
 		departure.add(Calendar.MINUTE, departureMinits);
-		System.out.println("Departure time: " + departureTime);
+		// System.out.println("Departure time: " + departureTime);
 
 		WebElement element = driver.findElement(FLIGHT_INFO_TABLE);
 		List<WebElement> ticketsAvaliable = element.findElements(TICKETS_AVALIABLE);
@@ -67,7 +67,8 @@ public class OneWayFlightInfoPage extends AbstractPage {
 			WebElement ticketClass = classInfo.get(i);
 			String tClass = ticketClass.getAttribute("data-rel");
 			flight.setTicketType(tClass);
-			System.out.println("Ticket class: " + tClass + " " + "Total price: " + price);
+			// System.out.println("Ticket class: " + tClass + " " + "Total price: " +
+			// price);
 			listOfFlights.add(flight);
 		}
 
@@ -75,8 +76,6 @@ public class OneWayFlightInfoPage extends AbstractPage {
 		wait2.until(ExpectedConditions.elementToBeClickable(BACK_BUTTON));
 		WebElement backButton = driver.findElement(BACK_BUTTON);
 		backButton.click();
-
-		captchaHandler();
 
 	}
 

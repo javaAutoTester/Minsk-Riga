@@ -80,7 +80,7 @@ public class HomePage extends AbstractPage {
 	}
 
 	public void pickDate(Calendar date) {
-		System.out.println("Departure date: " + date.getTime());
+		// System.out.println("Departure date: " + date.getTime());
 		String month = date.getDisplayName(2, 2, new Locale("English", "US"));
 		int year = date.get(1);
 		int month_number = date.get(2);
@@ -100,7 +100,6 @@ public class HomePage extends AbstractPage {
 
 	public void submitRequestForm() {
 		driver.findElement(REQUEST_FORM).submit();
-		captchaHandler();
 	}
 
 }

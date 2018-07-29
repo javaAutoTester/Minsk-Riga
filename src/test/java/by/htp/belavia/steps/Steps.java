@@ -17,7 +17,6 @@ import by.htp.belavia.pages.ReturnFlightInfoPage;
 public class Steps {
 
 	private WebDriver driver;
-	private static final String HOME_PAGE_URL = "https://en.belavia.by/";
 
 	public Steps(WebDriver driver) {
 		super();
@@ -32,6 +31,7 @@ public class Steps {
 		homePage.pickOneWayTrip();
 		homePage.pickDate(departureData);
 		homePage.submitRequestForm();
+		homePage.captchaHandler();
 		OneWayFlightInfoPage infoPage = new OneWayFlightInfoPage(driver);
 		infoPage.flightInfo(departureData, listOfFlights);
 	}
@@ -45,48 +45,63 @@ public class Steps {
 			HomePageNewRequest homePage = new HomePageNewRequest(driver);
 			homePage.pickDate(departureDataNext);
 			homePage.submitRequestForm();
+			homePage.captchaHandler();
 			OneWayFlightInfoPage infoPage = new OneWayFlightInfoPage(driver);
 			infoPage.flightInfo(departureDataNext, listOfFlights);
+			infoPage.captchaHandler();
 			departureDataNext.add(Calendar.DAY_OF_MONTH, 1);
 		}
-		System.out.println("FINISH DATE");
 	}
 
 	public void ReturnRequest(Calendar departure_date, Calendar return_date, Set<ReturnFlight> listOFreturnFlights) {
 		Calendar dep = (Calendar) departure_date.clone();
-		dep.add(Calendar.DAY_OF_MONTH, -3);
 		while (dep.compareTo(return_date) < 0) {
 			Calendar ret = (Calendar) return_date.clone();
-			ret.add(Calendar.DAY_OF_MONTH, 3);
-			while (ret.compareTo(departure_date) > 0) {
+			while (ret.compareTo(dep) > 0) {
 				HomePageReturnQuery homePageReturn = new HomePageReturnQuery(driver);
 				homePageReturn.goToPage();
 				homePageReturn.fillFrom();
 				homePageReturn.fillTo();
 				homePageReturn.pickDate(dep, ret);
 				homePageReturn.submitRequestForm();
+				homePageReturn.captchaHandler();
 				ReturnFlightInfoPage infoPage = new ReturnFlightInfoPage(driver);
 				infoPage.goToFareCalendar();
+				infoPage.captchaHandler();
 				FareCalendarPage fareCalendar = new FareCalendarPage(driver);
 				fareCalendar.returnFlightInfo(listOFreturnFlights);
-				driver.get(HOME_PAGE_URL);
 				ret.add(Calendar.DAY_OF_MONTH, -7);
+				if (ret.compareTo(dep) <= 0) {
+					ret.add(Calendar.DAY_OF_MONTH, 4);
+				}
 			}
 			dep.add(Calendar.DAY_OF_MONTH, 7);
+			if (dep.compareTo(return_date) >= 0) {
+				dep.add(Calendar.DAY_OF_MONTH, -4);
+			}
 		}
 	}
 
 	public void printListOfFlights(Set<Flight> listOfFlights) {
-		for (Iterator iterator = listOfFlights.iterator(); iterator.hasNext();) {
+		int count = 1;
+		for (Iterator<Flight> iterator = listOfFlights.iterator(); iterator.hasNext();) {
 			Flight flight = (Flight) iterator.next();
-			System.out.println(flight.toString());
+			System.out.println(count+"  "+flight.toString());
+			count++;
 		}
 	}
 
-	public void printListOfReturnFlights(Set<ReturnFlight> listOfReturnFlights) {
-		for (Iterator iterator = listOfReturnFlights.iterator(); iterator.hasNext();) {
-			ReturnFlight flight = (ReturnFlight) iterator.next();
-			System.out.println(flight.toString());
+	public void printListOfReturnFlights(Calendar departure_date, Calendar return_date,
+			Set<ReturnFlight> listOfReturnFlights) {
+		int count = 1;
+		for (Iterator<ReturnFlight> iterator = listOfReturnFlights.iterator(); iterator.hasNext();) {
+			ReturnFlight returnFlight = (ReturnFlight) iterator.next();
+			Calendar dep = returnFlight.getDep_date();
+			Calendar ret = returnFlight.getRet_date();
+			if (dep.compareTo(departure_date) >= 0 && ret.compareTo(return_date) <= 0) {
+				System.out.println(count +"  " + returnFlight.toString());
+				count++;
+			}
 		}
 	}
 

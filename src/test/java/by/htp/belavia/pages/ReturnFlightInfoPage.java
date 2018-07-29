@@ -15,12 +15,10 @@ public class ReturnFlightInfoPage extends AbstractPage {
 	}
 
 	public void goToFareCalendar() {
-
-		WebDriverWait wait = new WebDriverWait(driver, 20);
+		WebDriverWait wait = new WebDriverWait(driver, 40);
 		wait.until(ExpectedConditions.elementToBeClickable(FARE_CALENDAR));
 		WebElement fareCalendar = driver.findElement(FARE_CALENDAR);
 		fareCalendar.click();
-
 	}
 
 }
